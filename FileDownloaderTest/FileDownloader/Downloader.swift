@@ -119,6 +119,7 @@ open class Downloader: NSObject {
                 let newPath = newDocumentDirectory + "/" + fileIdentifierName
                 try FileManager.default.removeItem(atPath: newPath)
                 completion(nil)
+                return
             }
             catch {
                 print ("The file could not be removed")
@@ -158,6 +159,7 @@ extension Downloader: URLSessionDelegate, URLSessionDownloadDelegate {
             }
             
             do {
+                try? FileManager.default.removeItem(at: destinationUrl)
                 try FileManager.default.copyItem(at: location, to: destinationUrl)
                 let model = DownloadModel(identifier: identifier, status: .DOWNLOADED, progress: 100, remoteFilePath: downloadedModel?.remoteFilePath ?? "", localFilePath: destinationUrl.path)
                 downloadedModels.append(model)
